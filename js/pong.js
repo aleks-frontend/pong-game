@@ -141,6 +141,7 @@ class Pong {
 
         this.drawRect(this.ball);
 
+        this.drawScore();
         this.players.forEach(player => this.drawRect(player, player.color));
     }
 
