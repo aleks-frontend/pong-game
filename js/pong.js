@@ -58,6 +58,8 @@ class Pong {
         this._canvas = canvas;
         this._context = canvas.getContext('2d');
 
+        this.gameOn = false;
+
         this.stage = new Rect(canvas.width, canvas.height);
 
         this.ball = new Ball;
@@ -123,12 +125,15 @@ class Pong {
         this.ball.pos.x = this._canvas.width / 2;
         this.ball.pos.y = this._canvas.height / 2;
 
+        this.gameOn = false;
+
         this.ball.vel.x = 0;
         this.ball.vel.y = 0;
     }
 
     start() {
         if ( this.ball.vel.x == 0 && this.ball.vel.y == 0 ) {
+            this.gameOn = true;
             this.ball.vel.x = 300;
             this.ball.vel.y = 300;
             this.ball.len = 200;
@@ -188,12 +193,10 @@ class Pong {
 
         if ( this.ball.top < 0 || this.ball.bottom > this._canvas.height ) this.ball.vel.y = - this.ball.vel.y;
 
-        if ( this.ball.top < this.players[1].size.y / 2 ) {
-            this.players[1].pos.y = this.players[1].size.y / 2;
-        } else if ( this.ball.bottom > this._canvas.height - this.players[1].size.y / 2 ) {
-            this.players[1].pos.y = this._canvas.height - this.players[1].size.y / 2;
-        } else {
-            this.players[1].pos.y = this.ball.pos.y;
+        if ( this.ball.top < this.players[1].pos.y && this.gameOn ) {
+            this.players[1].pos.y -= 4;
+        } else if ( this.ball.top > this.players[1].pos.y && this.gameOn ) {
+            this.players[1].pos.y += 4;
         }
 
         this.players.forEach(player => this.collide(player, this.ball));
